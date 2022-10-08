@@ -5,7 +5,7 @@ class TourController {
     const queryObject = { ...req.query };
     const tours = await tourService.getAllTours(queryObject);
 
-    res.json({ total: tours.length, tours });
+    res.json({ tours });
   }
 
   async createTour(req, res) {
