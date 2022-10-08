@@ -2,8 +2,8 @@ const tourService = require('../services/tour');
 
 class TourController {
   async getAllTours(req, res) {
-    const queryObject = { ...req.query };
-    const data = await tourService.getAllTours(queryObject);
+    const q = { ...req.query };
+    const data = await tourService.getAllTours(q);
 
     res.json({ data });
   }
