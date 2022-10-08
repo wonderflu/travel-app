@@ -1,8 +1,16 @@
 const tourSchema = require('../models/tour');
 
 class tourService {
-  async getAllTours() {
-    const tours = await tourSchema.find();
+  async getAllTours(queryObject) {
+    const excludedFields = ['page', 'sort', 'limit', 'fields'];
+    excludedFields.forEach((el) => delete queryObject[el]);
+
+    let queryStr = JSON.stringify(queryObject);
+    queryStr = queryStr.replace(/\b(gte|gt|lte|lt)\b/g, (match) => `$${match}`);
+
+    const query = tourSchema.find(JSON.parse(queryStr));
+
+    const tours = await query;
 
     return tours;
   }
