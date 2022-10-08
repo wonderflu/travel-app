@@ -7,8 +7,8 @@ class tourService {
     return tours;
   }
 
-  async createTour(name, price) {
-    const newTour = await tourSchema.create({ name, price });
+  async createTour(tour) {
+    const newTour = await tourSchema.create({ ...tour });
 
     return newTour;
   }
