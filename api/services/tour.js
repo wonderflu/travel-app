@@ -1,5 +1,7 @@
 const tourSchema = require('../models/tour');
 const APIFeatures = require('../../utils/apiFeature');
+const CustomHTTPError = require('../../utils/error');
+const { TOUR_ALREADY_EXISTS, TOUR_NOT_FOUND } = require('../../consts/error');
 class tourService {
   async getAllTours(q) {
     const page = q.page * 1 || 1;
@@ -18,6 +20,12 @@ class tourService {
   }
 
   async createTour(tour) {
+    const duplicate = await tourSchema.findOne({ name: tour.name });
+
+    if (duplicate) {
+      throw CustomHTTPError.BadRequest(TOUR_ALREADY_EXISTS);
+    }
+
     const newTour = await tourSchema.create({ ...tour });
 
     return newTour;
@@ -25,6 +33,10 @@ class tourService {
 
   async getOneTour(id) {
     const tour = await tourSchema.findById(id);
+
+    if (!tour) {
+      throw CustomHTTPError.BadRequest(TOUR_NOT_FOUND);
+    }
 
     return tour;
   }
@@ -35,11 +47,19 @@ class tourService {
       runValidators: true,
     });
 
+    if (!tourToUpdate) {
+      throw CustomHTTPError.BadRequest(TOUR_NOT_FOUND);
+    }
+
     return tourToUpdate;
   }
 
   async deleteTour(id) {
-    await tourSchema.findByIdAndDelete(id);
+    const tourToDelete = await tourSchema.findByIdAndDelete(id);
+
+    if (!tourToDelete) {
+      throw CustomHTTPError.BadRequest(TOUR_NOT_FOUND);
+    }
   }
 }
 
