@@ -7,8 +7,8 @@ class tourService {
     return tours;
   }
 
-  async createTour(name, price) {
-    const newTour = await tourSchema.create({ name, price });
+  async createTour(tour) {
+    const newTour = await tourSchema.create({ ...tour });
 
     return newTour;
   }
@@ -19,8 +19,11 @@ class tourService {
     return tour;
   }
 
-  async updateTour(id, name) {
-    const tourToUpdate = await tourSchema.findByIdAndUpdate(id, name);
+  async updateTour(id, price) {
+    const tourToUpdate = await tourSchema.findByIdAndUpdate(id, price, {
+      new: true,
+      runValidators: true,
+    });
 
     return tourToUpdate;
   }

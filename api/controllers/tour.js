@@ -8,9 +8,9 @@ class TourController {
   }
 
   async createTour(req, res) {
-    const { name, price } = req.body;
+    const tour = req.body;
 
-    const newTour = await tourService.createTour(name, price);
+    const newTour = await tourService.createTour(tour);
 
     res.status(201).json(newTour);
   }
@@ -24,10 +24,10 @@ class TourController {
   }
 
   async updateTour(req, res) {
-    const { id } = req.params;
-    const { name } = req.body;
+    const { id } = req.params.id;
+    const { price } = req.body;
 
-    const tourToUpdate = await tourService.updateTour(id, name);
+    const tourToUpdate = await tourService.updateTour(id, price);
 
     res.json(tourToUpdate);
   }
