@@ -24,10 +24,10 @@ class TourController {
   }
 
   async updateTour(req, res) {
-    const { id } = req.params;
-    const { name } = req.body;
+    const { id } = req.params.id;
+    const { price } = req.body;
 
-    const tourToUpdate = await tourService.updateTour(id, name);
+    const tourToUpdate = await tourService.updateTour(id, price);
 
     res.json(tourToUpdate);
   }

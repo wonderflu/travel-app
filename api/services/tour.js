@@ -19,8 +19,11 @@ class tourService {
     return tour;
   }
 
-  async updateTour(id, name) {
-    const tourToUpdate = await tourSchema.findByIdAndUpdate(id, name);
+  async updateTour(id, price) {
+    const tourToUpdate = await tourSchema.findByIdAndUpdate(id, price, {
+      new: true,
+      runValidators: true,
+    });
 
     return tourToUpdate;
   }
