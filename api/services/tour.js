@@ -1,5 +1,5 @@
 const tourSchema = require('../models/tour');
-
+const CustomHTTPError = require('../../utils/error');
 class tourService {
   async getAllTours(queryObject) {
     // const excludedFields = ['page', 'sort', 'limit', 'fields'];
@@ -27,13 +27,17 @@ class tourService {
     const page = queryObject.page * 1 || 1;
     const limit = queryObject.limit * 1 || 10;
     const skip = (page - 1) * limit;
-    const total = await tourSchema.find({}).count();
+    const total = await tourSchema.countDocuments();
 
     query = query.skip(skip).limit(limit);
 
+    if (skip >= total) {
+      throw CustomHTTPError.BadRequest('This page does not exist');
+    }
+
     const tours = await query;
 
-    return { currentPage: page, total, limit, tours };
+    return { totalTours: total, currentPage: page, limitPerPage: limit, tours };
   }
 
   async createTour(tour) {
