@@ -1,9 +1,14 @@
 const Router = require('express');
 
 const tourController = require('../controllers/tour');
+const aliasTopTours = require('../middlewares/topFive');
 const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
 
 const tourRouter = Router();
+
+tourRouter
+  .route('/tours/top-5')
+  .get(aliasTopTours, asyncErrorHandler(tourController.getAllTours));
 
 tourRouter
   .route('/tours/')
