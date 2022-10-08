@@ -16,7 +16,7 @@ class TourController {
   }
 
   async getOneTour(req, res) {
-    const { id } = req.params.id;
+    const { id } = req.params;
 
     const tour = await tourService.getOneTour(id);
 
@@ -24,7 +24,7 @@ class TourController {
   }
 
   async updateTour(req, res) {
-    const { id } = req.params.id;
+    const { id } = req.params;
     const { name } = req.body;
 
     const tourToUpdate = await tourService.updateTour(id, name);
@@ -33,7 +33,7 @@ class TourController {
   }
 
   async deleteTour(req, res) {
-    const { id } = req.params.id;
+    const { id } = req.params;
 
     await tourService.deleteTour(id);
 
