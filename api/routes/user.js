@@ -7,6 +7,7 @@ const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 const userRouter = Router();
 
 userRouter.post('/users/signup', asyncErrorHandler(AuthController.signup));
+userRouter.post('/users/login', asyncErrorHandler(AuthController.login));
 
 userRouter.route('/users/').get(asyncErrorHandler(UserController.getAllUsers));
 

@@ -18,6 +18,7 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Please provide a password, this field cannot be empty'],
     minlength: [6, 'Password must have more or equal than 6 characters'],
+    select: false,
   },
   confirmPassword: {
     type: String,
@@ -40,6 +41,13 @@ userSchema.pre('save', async function (next) {
   this.confirmPassword = undefined;
   next();
 });
+
+userSchema.methods.correctPassword = async function (
+  passwordToCompare,
+  userPassword
+) {
+  return await bcrypt.compare(passwordToCompare, userPassword);
+};
 
 const User = model('User', userSchema);
 

@@ -7,7 +7,7 @@ const {
 } = require('../../configs');
 
 class TokenService {
-  generateToken(payload) {
+  generateTokens(payload) {
     const accessToken = jwt.sign(payload, JWT_ACCESS_SECRET, {
       expiresIn: JWT_ACCESS_EXPIRES_IN,
     });
