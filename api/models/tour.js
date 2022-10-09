@@ -8,6 +8,8 @@ const tourSchema = new Schema(
       required: [true, 'Name field cannot be empty'],
       unique: true,
       trim: true,
+      maxlength: [40, 'A tour name must have less or equal than 40 characters'],
+      minlength: [10, 'A tour name must have more or equal than 10 characters'],
     },
     duration: {
       type: Number,
@@ -20,6 +22,10 @@ const tourSchema = new Schema(
     difficulty: {
       type: String,
       required: [true, 'A tour must have a difficulty'],
+      enum: {
+        values: ['easy', 'medium', 'difficult'],
+        message: 'Difficulty is either: easy, medium or difficult',
+      },
     },
     ratingsQuantity: {
       type: Number,
@@ -28,12 +34,23 @@ const tourSchema = new Schema(
     ratingsAverage: {
       type: Number,
       default: 4.5,
+      min: [1, 'Rating must be above 1.0'],
+      max: [5, 'Rating must be below 5.0'],
     },
     price: {
       type: Number,
       required: [true, 'A tour must have a price'],
     },
-    priceDiscount: Number,
+    priceDiscount: {
+      type: Number,
+      validate: {
+        validator: function (value) {
+          // this only points to current doc on NEW document creation, doesnt work on update
+          return value < this.price;
+        },
+        message: 'Discount price ({VALUE}) should be below the regular price',
+      },
+    },
     summary: {
       type: String,
       trim: true,
