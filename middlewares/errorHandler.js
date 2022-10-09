@@ -27,7 +27,7 @@ const errorHandler = (err, req, res, next) => {
   if (err.name === 'ValidationError') {
     err.status = 400;
     const errors = Object.values(err.errors).map((el) => el.message);
-    const message = `Tour validation failed: ${errors.join('. ')}.`;
+    const message = `Validation failed: ${errors.join('. ')}.`;
 
     return res.status(400).json({ status: err.status, message });
   }
