@@ -1,4 +1,4 @@
-const CustomHTTPError = require('../../utils/error');
+const CustomHTTPError = require('../utils/error');
 
 const errorHandler = (err, req, res, next) => {
   console.log(err);

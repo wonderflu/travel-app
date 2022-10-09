@@ -2,12 +2,12 @@
   "name": "travel-app",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "server.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "NODE_ENV=production nodemon index.js",
-    "dev": "nodemon index.js",
-    "debug": "ndb index.js"
+    "start": "NODE_ENV=production nodemon server.js",
+    "dev": "nodemon server.js",
+    "debug": "ndb server.js"
   },
   "repository": {
     "type": "git",
