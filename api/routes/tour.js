@@ -1,8 +1,8 @@
 const Router = require('express');
 
 const TourController = require('../controllers/tour');
-const aliasTopTours = require('../middlewares/topFive');
-const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
+const aliasTopTours = require('../../middlewares/topFive');
+const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 
 const tourRouter = Router();
 
