@@ -1,7 +1,7 @@
 const TourSchema = require('../models/tour');
 const APIFeatures = require('../../utils/apiFeature');
 const CustomHTTPError = require('../../utils/error');
-const { TOUR_ALREADY_EXISTS, TOUR_NOT_FOUND } = require('../../consts/error');
+const { TOUR_NOT_FOUND } = require('../../consts/error');
 class tourService {
   async getAllTours(q) {
     const page = q.page * 1 || 1;
@@ -20,12 +20,6 @@ class tourService {
   }
 
   async createTour(tour) {
-    const duplicate = await TourSchema.findOne({ name: tour.name });
-
-    if (duplicate) {
-      throw CustomHTTPError.BadRequest(TOUR_ALREADY_EXISTS);
-    }
-
     const newTour = await TourSchema.create({ ...tour });
 
     return newTour;

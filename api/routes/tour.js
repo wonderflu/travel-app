@@ -3,11 +3,8 @@ const Router = require('express');
 const TourController = require('../controllers/tour');
 const aliasTopTours = require('../middlewares/topFive');
 const asyncErrorHandler = require('../middlewares/asyncErrorHandler');
-const idValidation = require('../middlewares/idValidation');
 
 const tourRouter = Router();
-
-tourRouter.param('id', idValidation);
 
 tourRouter
   .route('/tours/top-5')
