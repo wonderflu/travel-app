@@ -1,3 +1,4 @@
+const crypto = require('crypto');
 const UserSchema = require('../models/user');
 const TokenService = require('../services/token');
 const EmailService = require('../../utils/email');
@@ -10,6 +11,8 @@ const {
   INCORRECT_CREDENTIALS,
   USER_NOT_FOUND,
   NO_EMAIL,
+  EMAIL_NOT_SENT,
+  INVALID_TOKEN,
 } = require('../../consts/error');
 
 class AuthService {
@@ -59,10 +62,46 @@ class AuthService {
     const resetToken = user.createPasswordResetToken();
     await user.save({ validateBeforeSave: false });
 
-    await EmailService.SendEmail(email, RESET_PASSWORD, {
-      resetToken,
-      name: user.name,
+    try {
+      await EmailService.SendEmail(email, RESET_PASSWORD, {
+        resetToken,
+        name: user.name,
+      });
+    } catch (err) {
+      user.passwordResetToken = undefined;
+      user.passwordResetExpires = undefined;
+
+      await user.save({ validateBeforeSave: false });
+
+      throw CustomHTTPError.BadRequest(EMAIL_NOT_SENT);
+    }
+  }
+
+  async resetPassword(token, password, confirmPassword) {
+    const hashedToken = crypto.createHash('sha256').update(token).digest('hex');
+
+    const user = await UserSchema.findOne({
+      passwordResetToken: hashedToken,
+      passwordResetExpires: { $gt: Date.now() },
     });
+
+    if (!user) {
+      throw CustomHTTPError.BadRequest(INVALID_TOKEN);
+    }
+
+    user.password = password;
+    user.confirmPassword = confirmPassword;
+    user.passwordResetToken = undefined;
+    user.passwordResetExpires = undefined;
+
+    await user.save();
+
+    const tokens = TokenService.generateTokens({
+      id: user._id,
+      role: user.role,
+    });
+
+    return tokens;
   }
 }
 

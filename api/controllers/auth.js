@@ -20,15 +20,20 @@ class AuthController {
   async forgotPassword(req, res) {
     const { email } = req.body;
 
-    const tokens = await AuthService.forgotPassword(email);
+    await AuthService.forgotPassword(email);
 
-    res.json({ tokens });
+    res.status(204).end();
   }
 
   async resetPassword(req, res) {
-    const { email, password } = req.body;
+    const { password, confirmPassword } = req.body;
+    const { token } = req.params;
 
-    const tokens = await AuthService.resetPassword(email, resetPassword);
+    const tokens = await AuthService.resetPassword(
+      token,
+      password,
+      confirmPassword
+    );
 
     res.json({ tokens });
   }

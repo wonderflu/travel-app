@@ -14,7 +14,7 @@ userRouter.post(
   asyncErrorHandler(AuthController.forgotPassword)
 );
 userRouter.post(
-  '/resetPassword',
+  '/resetPassword/:token',
   asyncErrorHandler(AuthController.resetPassword)
 );
 
