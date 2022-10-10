@@ -1,7 +1,16 @@
 const UserSchema = require('../models/user');
 const TokenService = require('../services/token');
+const EmailService = require('../../utils/email');
 const CustomHTTPError = require('../../utils/error');
-const { NO_CREDENTIALS, INCORRECT_CREDENTIALS } = require('../../consts/error');
+const {
+  emailSubject: { RESET_PASSWORD },
+} = require('../../consts/emailSubject');
+const {
+  NO_CREDENTIALS,
+  INCORRECT_CREDENTIALS,
+  USER_NOT_FOUND,
+  NO_EMAIL,
+} = require('../../consts/error');
 
 class AuthService {
   async signup(user) {
@@ -34,6 +43,26 @@ class AuthService {
     });
 
     return tokens;
+  }
+
+  async forgotPassword(email) {
+    if (!email) {
+      throw CustomHTTPError.BadRequest(NO_EMAIL);
+    }
+
+    const user = await UserSchema.findOne({ email });
+
+    if (!user) {
+      throw CustomHTTPError.BadRequest(USER_NOT_FOUND);
+    }
+
+    const resetToken = user.createPasswordResetToken();
+    await user.save({ validateBeforeSave: false });
+
+    await EmailService.SendEmail(email, RESET_PASSWORD, {
+      resetToken,
+      name: user.name,
+    });
   }
 }
 

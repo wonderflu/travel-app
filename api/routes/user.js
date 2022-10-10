@@ -9,6 +9,15 @@ const userRouter = Router();
 userRouter.post('/signup', asyncErrorHandler(AuthController.signup));
 userRouter.post('/login', asyncErrorHandler(AuthController.login));
 
+userRouter.post(
+  '/forgotPassword',
+  asyncErrorHandler(AuthController.forgotPassword)
+);
+userRouter.post(
+  '/resetPassword',
+  asyncErrorHandler(AuthController.resetPassword)
+);
+
 userRouter.route('/').get(asyncErrorHandler(UserController.getAllUsers));
 
 userRouter
