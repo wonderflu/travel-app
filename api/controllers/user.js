@@ -16,6 +16,14 @@ class UserController {
     res.json({ updatedUser });
   }
 
+  async deleteMe(req, res) {
+    const { id } = req.user;
+
+    await UserService.deleteMe(id);
+
+    res.status(204).end();
+  }
+
   async getOneUser(req, res) {
     const { id } = req.params;
 

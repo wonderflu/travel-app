@@ -24,6 +24,10 @@ class UserService {
     return updatedUser;
   }
 
+  async deleteMe(id) {
+    await UserSchema.findByIdAndUpdate(id, { active: false });
+  }
+
   async getOneUser(id) {
     const user = await UserSchema.findById(id);
 
