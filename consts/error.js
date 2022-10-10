@@ -6,6 +6,9 @@ const errors = {
   INCORRECT_CREDENTIALS: 'Email or password is incorrect',
   NO_EMAIL: 'Please provide email',
   TEMPLATE_NOT_FOUND: 'The requested template was not found',
+  EMAIL_NOT_SENT:
+    'Something went wrong, an email was not sent, please try again later',
+  INVALID_TOKEN: 'Token is invalid or had expired',
 };
 
 module.exports = errors;
