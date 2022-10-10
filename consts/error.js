@@ -9,6 +9,7 @@ const errors = {
   EMAIL_NOT_SENT:
     'Something went wrong, an email was not sent, please try again later',
   INVALID_TOKEN: 'Token is invalid or had expired',
+  WRONG_PASSWORD: 'Password you entered is incorrect',
 };
 
 module.exports = errors;

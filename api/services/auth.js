@@ -13,6 +13,7 @@ const {
   NO_EMAIL,
   EMAIL_NOT_SENT,
   INVALID_TOKEN,
+  WRONG_PASSWORD,
 } = require('../../consts/error');
 
 class AuthService {
@@ -93,6 +94,27 @@ class AuthService {
     user.confirmPassword = confirmPassword;
     user.passwordResetToken = undefined;
     user.passwordResetExpires = undefined;
+
+    await user.save();
+
+    const tokens = TokenService.generateTokens({
+      id: user._id,
+      role: user.role,
+    });
+
+    return tokens;
+  }
+
+  async updatePassword(id, currentPassword, password, confirmPassword) {
+    const user = await UserSchema.findById(id).select('+password');
+
+    if (!(await user.correctPassword(currentPassword, user.password))) {
+      throw CustomHTTPError.BadRequest(WRONG_PASSWORD);
+    }
+
+    user.password = password;
+    user.confirmPassword = confirmPassword;
+    // cant user here findByIdAndUpdate coz validation in the model will not be applied, mogoose doesn't keep the current object in memory, we MUST use save here
 
     await user.save();
 
