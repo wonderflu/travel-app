@@ -25,12 +25,18 @@ userRouter.patch(
   asyncErrorHandler(AuthController.updatePassword)
 );
 
+userRouter.patch(
+  '/updateMe',
+  authMiddleware,
+  asyncErrorHandler(UserController.updateMe)
+);
+
 userRouter.route('/').get(asyncErrorHandler(UserController.getAllUsers));
 
-// userRouter
-//   .route('/:id')
-//   .get(asyncErrorHandler(UserController.getOneUser))
-//   .patch(asyncErrorHandler(UserController.updateUser))
-//   .delete(asyncErrorHandler(UserController.deleteUser));
+userRouter
+  .route('/:id')
+  .get(asyncErrorHandler(UserController.getOneUser))
+  .patch(asyncErrorHandler(UserController.updateUser))
+  .delete(asyncErrorHandler(UserController.deleteUser));
 
 module.exports = userRouter;
