@@ -1,3 +1,4 @@
+const { promisify } = require('util');
 const jwt = require('jsonwebtoken');
 const {
   JWT_ACCESS_SECRET,
@@ -20,6 +21,22 @@ class TokenService {
       accessToken,
       refreshToken,
     };
+  }
+
+  decodeAccessToken(token) {
+    try {
+      return jwt.verify(token, JWT_ACCESS_SECRET);
+    } catch (err) {
+      return null;
+    }
+  }
+
+  decodeRefreshToken(token) {
+    try {
+      return jwt.verify(token, JWT_REFRESH_SECRET);
+    } catch (err) {
+      return null;
+    }
   }
 }
 

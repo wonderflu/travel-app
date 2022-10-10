@@ -32,6 +32,13 @@ const errorHandler = (err, req, res, next) => {
     return res.status(400).json({ status: err.status, message });
   }
 
+  // if (err.name === 'JsonWebTokenError') {
+  //   err.status = 401;
+  //   const message = 'Invalid token, please log in again';
+
+  //   return res.status(401).json({ status: err.status, message });
+  // }
+
   return res.status(500).json({ message: err.message });
 };
 

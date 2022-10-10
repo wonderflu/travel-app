@@ -10,7 +10,10 @@ class CustomHTTPError extends Error {
   }
 
   static Unauthorized() {
-    return new CustomHTTPError(401, 'User is not authorized.');
+    return new CustomHTTPError(
+      401,
+      'The requested resource requires user authorization.'
+    );
   }
 
   static Forbidden() {
