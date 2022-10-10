@@ -16,6 +16,22 @@ class AuthController {
 
     res.json({ tokens });
   }
+
+  async forgotPassword(req, res) {
+    const { email } = req.body;
+
+    const tokens = await AuthService.forgotPassword(email);
+
+    res.json({ tokens });
+  }
+
+  async resetPassword(req, res) {
+    const { email, password } = req.body;
+
+    const tokens = await AuthService.resetPassword(email, resetPassword);
+
+    res.json({ tokens });
+  }
 }
 
 module.exports = new AuthController();
