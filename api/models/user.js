@@ -1,6 +1,9 @@
 const { Schema, model } = require('mongoose');
 const validator = require('validator');
 const bcrypt = require('bcryptjs');
+const {
+  roles: { USER, GUIDE, LEAD_GUIDE, ADMIN },
+} = require('../../consts/roles');
 
 const userSchema = new Schema({
   name: {
@@ -10,10 +13,10 @@ const userSchema = new Schema({
   role: {
     type: String,
     enum: {
-      values: ['user', 'guide', 'lead-guide', 'admin'],
-      message: 'Role can be either of those: user, guide, lead-guide or admin',
+      values: [USER, GUIDE, LEAD_GUIDE, ADMIN],
+      message: `Role can be either of those: ${USER}, ${GUIDE}, ${LEAD_GUIDE} or ${ADMIN}`,
     },
-    default: 'user',
+    default: USER,
   },
   email: {
     type: String,

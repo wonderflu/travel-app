@@ -4,6 +4,9 @@ const TourController = require('../controllers/tour');
 const aliasTopTours = require('../../middlewares/topFive');
 const { restrictTo } = require('../../middlewares/auth');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
+const {
+  roles: { LEAD_GUIDE, ADMIN },
+} = require('../../consts/roles');
 
 const tourRouter = Router();
 
@@ -28,11 +31,11 @@ tourRouter
   .route('/:id')
   .get(asyncErrorHandler(TourController.getOneTour))
   .patch(
-    restrictTo('admin', 'lead-guide'),
+    restrictTo(ADMIN, LEAD_GUIDE),
     asyncErrorHandler(TourController.updateTour)
   )
   .delete(
-    restrictTo('admin', 'lead-guide'),
+    restrictTo(ADMIN, LEAD_GUIDE),
     asyncErrorHandler(TourController.deleteTour)
   );
 
