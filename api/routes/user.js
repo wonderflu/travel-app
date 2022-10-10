@@ -31,6 +31,12 @@ userRouter.patch(
   asyncErrorHandler(UserController.updateMe)
 );
 
+userRouter.delete(
+  '/deleteMe',
+  authMiddleware,
+  asyncErrorHandler(UserController.deleteMe)
+);
+
 userRouter.route('/').get(asyncErrorHandler(UserController.getAllUsers));
 
 userRouter
