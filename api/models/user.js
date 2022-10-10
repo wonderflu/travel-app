@@ -7,6 +7,14 @@ const userSchema = new Schema({
     type: String,
     required: [true, 'Please provide your name, this field cannot be empty'],
   },
+  role: {
+    type: String,
+    enum: {
+      values: ['user', 'guide', 'lead-guide', 'admin'],
+      message: 'Role can be either of those: user, guide, lead-guide or admin',
+    },
+    default: 'user',
+  },
   email: {
     type: String,
     required: [true, 'Please provide your email, this field cannot be empty'],

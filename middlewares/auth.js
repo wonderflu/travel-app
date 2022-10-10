@@ -36,4 +36,15 @@ const authMiddleware = async (req, res, next) => {
   next();
 };
 
-module.exports = authMiddleware;
+const restrictTo = (...roles) => {
+  return (req, res, next) => {
+    // because of the closure it will have access to roles
+    if (!roles.includes(req.user.role)) {
+      return next(CustomHTTPError.Forbidden());
+    }
+
+    next();
+  };
+};
+
+module.exports = { authMiddleware, restrictTo };
