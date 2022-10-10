@@ -7,6 +7,15 @@ class UserController {
     res.json({ users });
   }
 
+  async updateMe(req, res) {
+    const { id } = req.user;
+    const user = req.body;
+
+    const updatedUser = await UserService.updateMe(id, user);
+
+    res.json({ updatedUser });
+  }
+
   async getOneUser(req, res) {
     const { id } = req.params;
 
