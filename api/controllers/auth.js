@@ -37,6 +37,20 @@ class AuthController {
 
     res.json({ tokens });
   }
+
+  async updatePassword(req, res) {
+    const { id } = req.user;
+    const { currentPassword, password, confirmPassword } = req.body;
+
+    const tokens = await AuthService.updatePassword(
+      id,
+      currentPassword,
+      password,
+      confirmPassword
+    );
+
+    res.json({ tokens });
+  }
 }
 
 module.exports = new AuthController();
