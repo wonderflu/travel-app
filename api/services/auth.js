@@ -28,7 +28,10 @@ class AuthService {
       throw CustomHTTPError.BadRequest(INCORRECT_CREDENTIALS);
     }
 
-    const tokens = TokenService.generateTokens({ id: user._id });
+    const tokens = TokenService.generateTokens({
+      id: user._id,
+      role: user.role,
+    });
 
     return tokens;
   }

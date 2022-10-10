@@ -6,13 +6,13 @@ const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 
 const userRouter = Router();
 
-userRouter.post('/users/signup', asyncErrorHandler(AuthController.signup));
-userRouter.post('/users/login', asyncErrorHandler(AuthController.login));
+userRouter.post('/signup', asyncErrorHandler(AuthController.signup));
+userRouter.post('/login', asyncErrorHandler(AuthController.login));
 
-userRouter.route('/users/').get(asyncErrorHandler(UserController.getAllUsers));
+userRouter.route('/').get(asyncErrorHandler(UserController.getAllUsers));
 
 userRouter
-  .route('/users/:id')
+  .route('/:id')
   .get(asyncErrorHandler(UserController.getOneUser))
   .patch(asyncErrorHandler(UserController.updateUser))
   .delete(asyncErrorHandler(UserController.deleteUser));
