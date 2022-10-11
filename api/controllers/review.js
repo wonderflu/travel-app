@@ -12,16 +12,15 @@ class ReviewController {
     res.json({ reviews });
   }
 
+  async getOneReview(req, res) {
+    const { id } = req.params;
+
+    const review = await ReviewService.getOneReview(id);
+
+    res.json({ review });
+  }
+
   async createReview(req, res) {
-    // allow nested toures
-    if (!req.body.tour) {
-      req.body.tour = req.params.id;
-    }
-
-    if (!req.body.user) {
-      req.body.user = req.user.id;
-    }
-
     const review = req.body;
 
     const newReview = await ReviewService.createReview(review);
@@ -30,20 +29,20 @@ class ReviewController {
   }
 
   async updateReview(req, res) {
-    if (!req.body.tour) {
-      req.body.tour = req.params.id;
-    }
-
-    if (!req.body.user) {
-      req.body.user = req.user.id;
-    }
-
     const { id } = req.params;
     const { review } = req.body;
 
     const updatedReview = await ReviewService.updateReview(id, review);
 
     res.json({ updatedReview });
+  }
+
+  async deleteReview(req, res) {
+    const { id } = req.params;
+
+    await ReviewService.deleteReview(id);
+
+    res.status(204).json();
   }
 }
 

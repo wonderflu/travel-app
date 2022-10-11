@@ -9,6 +9,16 @@ class ReviewService {
     return reviews;
   }
 
+  async getOneReview(id) {
+    const review = await ReviewSchema.findById(id);
+
+    if (!review) {
+      throw CustomHTTPError.BadRequest(REVIEW_NOT_FOUND);
+    }
+
+    return review;
+  }
+
   async createReview(review) {
     const newReview = await ReviewSchema.create({ ...review });
 
@@ -30,6 +40,14 @@ class ReviewService {
     }
 
     return updatedReview;
+  }
+
+  async deleteReview(id) {
+    const deletedReview = await ReviewSchema.findByIdAndDelete(id);
+
+    if (!deletedReview) {
+      throw CustomHTTPError.BadRequest(REVIEW_NOT_FOUND);
+    }
   }
 }
 
