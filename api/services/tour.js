@@ -26,7 +26,7 @@ class tourService {
   }
 
   async getOneTour(id) {
-    const tour = await TourSchema.findById(id);
+    const tour = await TourSchema.findById(id).populate('reviews');
 
     if (!tour) {
       throw CustomHTTPError.BadRequest(TOUR_NOT_FOUND);
