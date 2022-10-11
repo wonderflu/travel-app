@@ -31,8 +31,8 @@ app.use(helmet());
 app.use('/api', limiter);
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
-app.use(mongoSanitize()); // against query ingections attacks. looks at the req.body, req.query, req.params and filter out all $ signs and . - this is how mongoDB operators are written
-app.use(xss()); // against mal html code > convert all html symbols <div> etc
+app.use(mongoSanitize()); // against query injections attacks. looks at the req.body, req.query, req.params and filter out all $ signs and . - this is how mongoDB operators are written
+app.use(xss()); // against malicious html code > convert all html symbols <div> etc
 app.use(
   hpp({
     whitelist: [
