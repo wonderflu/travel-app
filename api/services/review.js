@@ -3,8 +3,8 @@ const ReviewSchema = require('../models/review');
 const { REVIEW_NOT_FOUND } = require('../../consts/error');
 
 class ReviewService {
-  async getAllReviews() {
-    const reviews = await ReviewSchema.find();
+  async getAllReviews(filter) {
+    const reviews = await ReviewSchema.find(filter);
 
     return reviews;
   }

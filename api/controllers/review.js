@@ -2,7 +2,12 @@ const ReviewService = require('../services/review');
 
 class ReviewController {
   async getAllReviews(req, res) {
-    const reviews = await ReviewService.getAllReviews();
+    let filter = {};
+
+    if (req.params.id) {
+      filter = { tour: req.params.id };
+    }
+    const reviews = await ReviewService.getAllReviews(filter);
 
     res.json({ reviews });
   }
