@@ -108,6 +108,13 @@ tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;
 });
 
+//virtual populate
+tourSchema.virtual('reviews', {
+  ref: 'Review',
+  foreignField: 'tour',
+  localField: '_id',
+});
+
 // in case i would want embedding, but it has drawbacks, so im gonna switch to referencing
 // tourSchema.pre('save', async function (next) {
 //   const guides = this.guides.map(async id => await UserSchema.findById(id))
