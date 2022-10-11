@@ -16,16 +16,20 @@ class ReviewService {
   }
 
   async updateReview(id, review) {
-    const reviewToUpdate = await ReviewSchema.findByIdAndUpdate(id, review, {
-      new: true,
-      runValidators: true,
-    });
+    const updatedReview = await ReviewSchema.findByIdAndUpdate(
+      id,
+      { review },
+      {
+        new: true,
+        runValidators: true,
+      }
+    );
 
-    if (!reviewToUpdate) {
+    if (!updatedReview) {
       throw CustomHTTPError.BadRequest(REVIEW_NOT_FOUND);
     }
 
-    return reviewToUpdate;
+    return updatedReview;
   }
 }
 

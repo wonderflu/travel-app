@@ -36,22 +36,22 @@ class tourService {
   }
 
   async updateTour(id, price) {
-    const tourToUpdate = await TourSchema.findByIdAndUpdate(id, price, {
+    const updatedTour = await TourSchema.findByIdAndUpdate(id, price, {
       new: true,
       runValidators: true,
     });
 
-    if (!tourToUpdate) {
+    if (!updatedTour) {
       throw CustomHTTPError.BadRequest(TOUR_NOT_FOUND);
     }
 
-    return tourToUpdate;
+    return updatedTour;
   }
 
   async deleteTour(id) {
-    const tourToDelete = await TourSchema.findByIdAndDelete(id);
+    const deletedTour = await TourSchema.findByIdAndDelete(id);
 
-    if (!tourToDelete) {
+    if (!deletedTour) {
       throw CustomHTTPError.BadRequest(TOUR_NOT_FOUND);
     }
   }

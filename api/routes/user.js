@@ -1,11 +1,9 @@
-const Router = require('express');
+const userRouter = require('express').Router();
 
 const AuthController = require('../controllers/auth');
 const UserController = require('../controllers/user');
 const { authMiddleware } = require('../../middlewares/auth');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
-
-const userRouter = Router();
 
 userRouter.post('/signup', asyncErrorHandler(AuthController.signup));
 userRouter.post('/login', asyncErrorHandler(AuthController.login));
