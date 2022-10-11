@@ -3,6 +3,7 @@ const userRouter = require('express').Router();
 const AuthController = require('../controllers/auth');
 const UserController = require('../controllers/user');
 const { authMiddleware } = require('../../middlewares/auth');
+const { getMe } = require('../../middlewares/currentUserId');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 
 userRouter.post('/signup', asyncErrorHandler(AuthController.signup));
@@ -21,6 +22,13 @@ userRouter.patch(
   '/updateMyPassword',
   authMiddleware,
   asyncErrorHandler(AuthController.updatePassword)
+);
+
+userRouter.get(
+  '/me',
+  authMiddleware,
+  getMe,
+  asyncErrorHandler(UserController.getOneUser)
 );
 
 userRouter.patch(
