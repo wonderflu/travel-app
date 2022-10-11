@@ -1,4 +1,5 @@
 const AuthService = require('../services/auth');
+const { COOKIE_OPTIONS } = require('../../consts/cookie');
 
 class AuthController {
   async signup(req, res) {
@@ -13,6 +14,8 @@ class AuthController {
     const { email, password } = req.body;
 
     const tokens = await AuthService.login(email, password);
+
+    res.cookie('refreshToken', tokens.refreshToken, COOKIE_OPTIONS);
 
     res.json({ tokens });
   }

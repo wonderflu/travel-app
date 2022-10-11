@@ -11,6 +11,8 @@ const errors = {
   INVALID_TOKEN: 'Token is invalid or had expired',
   WRONG_PASSWORD: 'Password you entered is incorrect',
   CANNOT_UPDATE: 'Cannot update this field',
+  TOO_MANY_REQUESTS:
+    'Too many requests from this IP, please try again in an hour',
 };
 
 module.exports = errors;

@@ -24,7 +24,10 @@ const userSchema = new Schema({
     required: [true, 'Please provide your email, this field cannot be empty'],
     unique: true,
     lowercase: true,
-    validate: [validator.isEmail, 'Please provide a valid email'],
+    validate: [
+      validator.isEmail,
+      'Invalid email address format, please use john@example.com',
+    ],
   },
   password: {
     type: String,
