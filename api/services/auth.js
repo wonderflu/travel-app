@@ -27,6 +27,8 @@ class AuthService {
       confirmPassword,
     });
 
+    newUser.password = undefined;
+
     return newUser;
   }
 
