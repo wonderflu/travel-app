@@ -1,11 +1,12 @@
 const Router = require('express');
 
 const TourController = require('../controllers/tour');
+const ReviewController = require('../controllers/review');
 const aliasTopTours = require('../../middlewares/topFive');
 const { restrictTo } = require('../../middlewares/auth');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 const {
-  roles: { LEAD_GUIDE, ADMIN },
+  roles: { LEAD_GUIDE, ADMIN, USER },
 } = require('../../consts/roles');
 
 const tourRouter = Router();
@@ -38,5 +39,9 @@ tourRouter
     restrictTo(ADMIN, LEAD_GUIDE),
     asyncErrorHandler(TourController.deleteTour)
   );
+
+tourRouter
+  .route('/:id/reviews/')
+  .post(restrictTo(USER), asyncErrorHandler(ReviewController.createReview));
 
 module.exports = tourRouter;

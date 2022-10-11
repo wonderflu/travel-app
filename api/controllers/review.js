@@ -8,6 +8,15 @@ class ReviewController {
   }
 
   async createReview(req, res) {
+    // allow nested toures
+    if (!req.body.tour) {
+      req.body.tour = req.params.id;
+    }
+
+    if (!req.body.user) {
+      req.body.user = req.user.id;
+    }
+
     const review = req.body;
 
     const newReview = await ReviewService.createReview(review);
