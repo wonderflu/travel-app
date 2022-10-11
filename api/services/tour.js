@@ -14,6 +14,8 @@ class tourService {
       .limitFields()
       .paginate();
 
+    // const tours = await features.query.explain();
+
     const tours = await features.query;
 
     return { totalTours: total, currentPage: page, limitPerPage: limit, tours };

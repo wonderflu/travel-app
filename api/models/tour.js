@@ -37,6 +37,7 @@ const tourSchema = new Schema(
       default: 4.5,
       min: [1, 'Rating must be above 1.0'],
       max: [5, 'Rating must be below 5.0'],
+      set: (val) => Math.round(val * 10) / 10,
     },
     price: {
       type: Number,
@@ -103,6 +104,10 @@ const tourSchema = new Schema(
     toObject: { virtuals: true },
   }
 );
+
+tourSchema.index({ price: 1, ratingsAverage: -1 }); //compound index, works for individual as well
+tourSchema.index({ slug: 1 });
+//1 asc order -1 desc order
 
 tourSchema.virtual('durationWeeks').get(function () {
   return this.duration / 7;

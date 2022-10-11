@@ -1,4 +1,6 @@
+const e = require('express');
 const { Schema, model } = require('mongoose');
+const tourSchema = require('../models/tour');
 
 const reviewSchema = new Schema(
   {
@@ -30,6 +32,8 @@ const reviewSchema = new Schema(
   }
 );
 
+reviewSchema.index({ tour: 1, user: 1 }, { unique: true }); // to avoid duplicate reviews from one user to the same tour
+
 reviewSchema.pre(/^find/, function (next) {
   this.populate({
     path: 'user',
@@ -37,6 +41,48 @@ reviewSchema.pre(/^find/, function (next) {
   });
 
   next();
+});
+
+reviewSchema.statics.calcAverageRatings = async function (id) {
+  const stats = await this.aggregate([
+    {
+      $match: { tour: id },
+    },
+    {
+      $group: {
+        _id: '$tour',
+        nRating: { $sum: 1 },
+        avgRating: { $avg: '$rating' },
+      },
+    },
+  ]);
+
+  if (stats.length) {
+    await tourSchema.findByIdAndUpdate(id, {
+      ratingsQuantity: stats[0].nRating,
+      ratingsAverage: stats[0].avgRating,
+    });
+  } else {
+    await tourSchema.findByIdAndUpdate(id, {
+      ratingsQuantity: 0,
+      ratingsAverage: 4.5,
+    });
+  }
+};
+
+reviewSchema.post('save', function () {
+  //constructor points to the currect review
+  this.constructor.calcAverageRatings(this.tour);
+});
+
+reviewSchema.pre(/^findOneAnd/, async function (next) {
+  this.result = await this.findOne().clone(); // clone is needed to allow to execute the same query twice
+
+  next();
+});
+
+reviewSchema.post(/^findOneAnd/, async function () {
+  await this.result.constructor.calcAverageRatings(this.result.tour);
 });
 
 const Review = model('Review', reviewSchema);
