@@ -25,12 +25,20 @@ class ReviewController {
   }
 
   async updateReview(req, res) {
-    const { id } = req.params.id;
+    if (!req.body.tour) {
+      req.body.tour = req.params.id;
+    }
+
+    if (!req.body.user) {
+      req.body.user = req.user.id;
+    }
+
+    const { id } = req.params;
     const { review } = req.body;
 
-    const reviewToUpdate = await ReviewService.updateReview(id, review);
+    const updatedReview = await ReviewService.updateReview(id, review);
 
-    res.json({ reviewToUpdate });
+    res.json({ updatedReview });
   }
 }
 

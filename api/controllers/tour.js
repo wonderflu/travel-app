@@ -28,9 +28,9 @@ class TourController {
     const { id } = req.params.id;
     const { price } = req.body;
 
-    const tourToUpdate = await TourService.updateTour(id, price);
+    const updatedTour = await TourService.updateTour(id, price);
 
-    res.json({ tourToUpdate });
+    res.json({ updatedTour });
   }
 
   async deleteTour(req, res) {
