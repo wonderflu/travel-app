@@ -3,10 +3,10 @@ const tourRouter = require('express').Router();
 const TourController = require('../controllers/tour');
 const reviewRouter = require('./review');
 const aliasTopTours = require('../../middlewares/topFive');
-const { restrictTo } = require('../../middlewares/auth');
+const { authMiddleware, restrictTo } = require('../../middlewares/auth');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 const {
-  roles: { LEAD_GUIDE, ADMIN },
+  roles: { LEAD_GUIDE, ADMIN, GUIDE },
 } = require('../../consts/roles');
 
 tourRouter.use('/:id/reviews', reviewRouter);
@@ -21,21 +21,31 @@ tourRouter
 
 tourRouter
   .route('/monthly-plan/:year')
-  .get(asyncErrorHandler(TourController.getMonthlyPlan));
+  .get(
+    authMiddleware,
+    restrictTo(ADMIN, LEAD_GUIDE, GUIDE),
+    asyncErrorHandler(TourController.getMonthlyPlan)
+  );
 
 tourRouter
   .route('/')
   .get(asyncErrorHandler(TourController.getAllTours))
-  .post(asyncErrorHandler(TourController.createTour));
+  .post(
+    authMiddleware,
+    restrictTo(ADMIN, LEAD_GUIDE),
+    asyncErrorHandler(TourController.createTour)
+  );
 
 tourRouter
   .route('/:id')
   .get(asyncErrorHandler(TourController.getOneTour))
   .patch(
+    authMiddleware,
     restrictTo(ADMIN, LEAD_GUIDE),
     asyncErrorHandler(TourController.updateTour)
   )
   .delete(
+    authMiddleware,
     restrictTo(ADMIN, LEAD_GUIDE),
     asyncErrorHandler(TourController.deleteTour)
   );

@@ -2,26 +2,35 @@ const reviewRouter = require('express').Router({ mergeParams: true }); // gives 
 
 const ReviewController = require('../controllers/review');
 const { authMiddleware, restrictTo } = require('../../middlewares/auth');
+const { UserAndTourIds } = require('../../middlewares/setUserTourId');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
 const {
-  roles: { USER },
+  roles: { USER, ADMIN },
 } = require('../../consts/roles');
+
+reviewRouter.use(authMiddleware);
 
 reviewRouter
   .route('/')
   .get(asyncErrorHandler(ReviewController.getAllReviews))
   .post(
-    authMiddleware,
     restrictTo(USER),
+    UserAndTourIds,
     asyncErrorHandler(ReviewController.createReview)
   );
 
 reviewRouter
   .route('/:id')
+  .get(asyncErrorHandler(ReviewController.getOneReview))
   .patch(
-    authMiddleware,
-    restrictTo(USER),
+    restrictTo(USER, ADMIN),
+    UserAndTourIds,
     asyncErrorHandler(ReviewController.updateReview)
+  )
+  .delete(
+    restrictTo(USER, ADMIN),
+    UserAndTourIds,
+    asyncErrorHandler(ReviewController.deleteReview)
   );
 
 module.exports = reviewRouter;

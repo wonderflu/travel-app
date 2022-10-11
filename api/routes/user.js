@@ -2,13 +2,15 @@ const userRouter = require('express').Router();
 
 const AuthController = require('../controllers/auth');
 const UserController = require('../controllers/user');
-const { authMiddleware } = require('../../middlewares/auth');
-const { getMe } = require('../../middlewares/currentUserId');
+const { authMiddleware, restrictTo } = require('../../middlewares/auth');
+const { getMe } = require('../../middlewares/setCurrentUserId');
 const asyncErrorHandler = require('../../middlewares/asyncErrorHandler');
+const {
+  roles: { ADMIN },
+} = require('../../consts/roles');
 
 userRouter.post('/signup', asyncErrorHandler(AuthController.signup));
 userRouter.post('/login', asyncErrorHandler(AuthController.login));
-
 userRouter.post(
   '/forgotPassword',
   asyncErrorHandler(AuthController.forgotPassword)
@@ -18,33 +20,19 @@ userRouter.patch(
   asyncErrorHandler(AuthController.resetPassword)
 );
 
+userRouter.use(authMiddleware);
+
+userRouter.get('/me', getMe, asyncErrorHandler(UserController.getOneUser));
 userRouter.patch(
   '/updateMyPassword',
-  authMiddleware,
   asyncErrorHandler(AuthController.updatePassword)
 );
+userRouter.patch('/updateMe', asyncErrorHandler(UserController.updateMe));
+userRouter.delete('/deleteMe', asyncErrorHandler(UserController.deleteMe));
 
-userRouter.get(
-  '/me',
-  authMiddleware,
-  getMe,
-  asyncErrorHandler(UserController.getOneUser)
-);
-
-userRouter.patch(
-  '/updateMe',
-  authMiddleware,
-  asyncErrorHandler(UserController.updateMe)
-);
-
-userRouter.delete(
-  '/deleteMe',
-  authMiddleware,
-  asyncErrorHandler(UserController.deleteMe)
-);
+userRouter.use(restrictTo(ADMIN));
 
 userRouter.route('/').get(asyncErrorHandler(UserController.getAllUsers));
-
 userRouter
   .route('/:id')
   .get(asyncErrorHandler(UserController.getOneUser))
