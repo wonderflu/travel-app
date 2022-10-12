@@ -28,6 +28,14 @@ tourRouter
   );
 
 tourRouter
+  .route('/tours-within/:distance/center/:latlng/unit/:unit')
+  .get(asyncErrorHandler(TourController.getToursWithin));
+
+tourRouter
+  .route('/distances/:latlng/unit/:unit')
+  .get(asyncErrorHandler(TourController.getDistances));
+
+tourRouter
   .route('/')
   .get(asyncErrorHandler(TourController.getAllTours))
   .post(

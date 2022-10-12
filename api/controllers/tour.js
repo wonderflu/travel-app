@@ -54,6 +54,26 @@ class TourController {
 
     res.json({ monthlyPlan });
   }
+
+  async getToursWithin(req, res) {
+    const { distance, latlng, unit } = req.params;
+
+    const toursWithin = await TourService.getToursWithin(
+      distance,
+      latlng,
+      unit
+    );
+
+    res.json({ toursWithin });
+  }
+
+  async getDistances(req, res) {
+    const { latlng, unit } = req.params;
+
+    const distances = await TourService.getDistances(latlng, unit);
+
+    res.json({ distances });
+  }
 }
 
 module.exports = new TourController();
