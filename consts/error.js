@@ -14,6 +14,8 @@ const errors = {
   CANNOT_UPDATE: 'Cannot update this field',
   TOO_MANY_REQUESTS:
     'Too many requests from this IP, please try again in an hour',
+  LAT_LNG_FORMAT:
+    'Wrong format, please provide latitude and longtitude in the following format: lat, lng',
 };
 
 module.exports = errors;

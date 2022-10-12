@@ -107,6 +107,7 @@ const tourSchema = new Schema(
 
 tourSchema.index({ price: 1, ratingsAverage: -1 }); //compound index, works for individual as well
 tourSchema.index({ slug: 1 });
+tourSchema.index({ startLocation: '2dsphere' });
 //1 asc order -1 desc order
 
 tourSchema.virtual('durationWeeks').get(function () {
@@ -147,10 +148,10 @@ tourSchema.pre(/^find/, function (next) {
   next();
 });
 
-tourSchema.pre('aggregate', function (next) {
-  this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
-  next();
-});
+// tourSchema.pre('aggregate', function (next) {
+//   this.pipeline().unshift({ $match: { secretTour: { $ne: true } } });
+//   next();
+// });
 
 const Tour = model('Tour', tourSchema);
 

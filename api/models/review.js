@@ -1,4 +1,3 @@
-const e = require('express');
 const { Schema, model } = require('mongoose');
 const tourSchema = require('../models/tour');
 

@@ -1,7 +1,7 @@
 const TourSchema = require('../models/tour');
 const APIFeatures = require('../../utils/apiFeature');
 const CustomHTTPError = require('../../utils/error');
-const { TOUR_NOT_FOUND } = require('../../consts/error');
+const { TOUR_NOT_FOUND, LAT_LNG_FORMAT } = require('../../consts/error');
 class tourService {
   async getAllTours(q) {
     const page = q.page * 1 || 1;
@@ -117,6 +117,53 @@ class tourService {
     ]);
 
     return monthlyPlan;
+  }
+
+  async getToursWithin(distance, latlng, unit) {
+    const [lat, lng] = latlng.split(',');
+
+    const radius = unit === 'mi' ? distance / 3963.2 : distance / 6378.1;
+
+    if (!lat || !lng) {
+      throw CustomHTTPError.BadRequest(LAT_LNG_FORMAT);
+    }
+
+    const toursWithin = await TourSchema.find({
+      startLocation: { $geoWithin: { $centerSphere: [[lng, lat], radius] } },
+    });
+
+    return toursWithin;
+  }
+
+  async getDistances(latlng, unit) {
+    const [lat, lng] = latlng.split(',');
+
+    const multiplier = unit === 'mi' ? 0.000621371 : 0.001;
+
+    if (!lat || !lng) {
+      throw CustomHTTPError.BadRequest(LAT_LNG_FORMAT);
+    }
+
+    const distances = await TourSchema.aggregate([
+      {
+        $geoNear: {
+          near: {
+            type: 'Point',
+            coordinates: [lng * 1, lat * 1],
+          },
+          distanceField: 'distance',
+          distanceMultiplier: multiplier,
+        },
+      },
+      {
+        $project: {
+          distance: 1,
+          name: 1,
+        },
+      },
+    ]);
+
+    return distances;
   }
 }
 
